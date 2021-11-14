@@ -3,7 +3,7 @@ name: Manual Deploy
 on:
   workflow_dispatch:
     inputs:
-      name:
+      target:
         type: choice
         description: Deploy target
         options: 
@@ -15,7 +15,8 @@ on:
         default: "Write some messsage here"
       dryrun:
         type: boolean
-        description: Dryrun or execute
+        description: Is dryrun?
+        default: true
       environment:
         type: environment
 
@@ -30,6 +31,7 @@ jobs:
         echo "target: ${{ github.event.inputs.target }}"
         echo "message: ${{ github.event.inputs.message }}"
         echo "dryrun: ${{ github.event.inputs.dryrun }}"
+    - run: env
     - name: Log deploy target info (use environment variables)
       run: |
         echo "target: $INPUT_TARGET"
@@ -37,4 +39,4 @@ jobs:
         echo "dryrun: $INPUT_DRYRUN"
     - name: Deploy (use environemt secrets)
       run: |
-        echo "Deploy target server: ${{ github.secrets.ENV_SERVER }}
+        echo "Deploy target server: ${{ github.secrets.ENV_SERVER }}"
