@@ -23,7 +23,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.environemt }}
+    environment: ${{ github.event.inputs.environment }}
 
     steps:
     - name: Log deploy target info (use github context)
