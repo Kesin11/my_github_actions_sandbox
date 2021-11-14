@@ -1,26 +1,40 @@
-name: Mixed inputs
+name: Manual Deploy
 
 on:
   workflow_dispatch:
     inputs:
       name:
         type: choice
-        description: Who to greet
+        description: Deploy target
         options: 
-        - monalisa
-        - cschleiden
+        - dev1
+        - dev2
+        - prod
       message:
         required: true
-      use-emoji:
+        default: "Write some messsage here"
+      dryrun:
         type: boolean
-        description: Include 🎉🤣 emojis
-#      environment:
-#        type: environment
+        description: Dryrun or execute
+      environment:
+        type: environment
 
 jobs:
-  greet:
+  deploy:
     runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environemt }}
 
     steps:
-    - name: Send greeting
-      run: echo "${{ github.event.inputs.message }} ${{ fromJSON('["", "🥳"]')[github.event.inputs.use-emoji == 'true'] }} ${{ github.event.inputs.name }}"
+    - name: Log deploy target info (use github context)
+      run: |
+        echo "target: ${{ github.event.inputs.target }}"
+        echo "message: ${{ github.event.inputs.message }}"
+        echo "dryrun: ${{ github.event.inputs.dryrun }}"
+    - name: Log deploy target info (use environment variables)
+      run: |
+        echo "target: $INPUT_TARGET"
+        echo "message: $INPUT_MESSAGE"
+        echo "dryrun: $INPUT_DRYRUN"
+    - name: Deploy (use environemt secrets)
+      run: |
+        echo "Deploy target server: ${{ github.secrets.ENV_SERVER }}
